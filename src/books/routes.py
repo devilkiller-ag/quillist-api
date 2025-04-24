@@ -28,7 +28,7 @@ async def get_all_books(session: AsyncSession = Depends(get_session)):
 async def create_a_book(
     book_data: BookCreateModel, session: AsyncSession = Depends(get_session)
 ) -> dict:
-    new_book = await book_service.create_book(book_data.model_dump(), session)
+    new_book = await book_service.create_book(book_data, session)
 
     return new_book
 
