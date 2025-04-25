@@ -1,5 +1,5 @@
 import uuid
-from datetime import datetime, date
+from datetime import datetime
 import sqlalchemy.dialects.postgresql as pg
 from sqlmodel import SQLModel, Field, Column
 
