@@ -31,8 +31,8 @@ Quillist API is a RESTful API built with FastAPI for managing book reviews. It p
 - [x] User model creation
 - [x] User registration endpoint
 - [x] Password hashing with Passlib
-- [ ] JWT authentication with PyJWT
-- [ ] User login endpoint
+- [x] JWT authentication with PyJWT
+- [x] User login endpoint
 - [ ] HTTP Bearer authentication
 - [ ] Refresh token implementation
 - [ ] Token revocation using Redis
