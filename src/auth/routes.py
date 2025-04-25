@@ -7,7 +7,7 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 from src.db.main import get_session
 from src.auth.service import UserService
 from src.auth.schemas import UserModel, UserCreateModel, UserLoginModel
-from src.auth.utils import verify_password, create_access_token, decode_token
+from src.auth.utils import verify_password, create_access_token
 
 
 auth_router = APIRouter()
