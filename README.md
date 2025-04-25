@@ -35,7 +35,7 @@ Quillist API is a RESTful API built with FastAPI for managing book reviews. It p
 - [x] User login endpoint
 - [x] HTTP Bearer authentication
 - [x] Refresh token implementation
-- [ ] Token revocation using Redis
+- [x] Token revocation using Redis
 - [ ] Role-based access control
 - [ ] Current user retrieval endpoint
 - [ ] Role checker dependency
@@ -124,7 +124,18 @@ To set up the project, follow these steps:
    pip install -r requirements.txt
    ```
 
-6. **Run the application:**
+6. **Define enviornment variables**
+   Create a `.env` file in the root folder and define all required enviornment variables.
+
+```
+DATABASE_URL=
+JWT_SECRET=
+JWT_ALGORITHM=
+REDIS_HOST=
+REDIS_PORT=
+```
+
+7. **Run the application:**
    ```bash
    fastapi dev src/
    ```

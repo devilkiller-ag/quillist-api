@@ -1,6 +1,7 @@
 alembic==1.15.2
 annotated-types==0.7.0
 anyio==4.9.0
+async-timeout==5.0.1
 asyncpg==0.30.0
 certifi==2025.1.31
 click==8.1.8
@@ -28,6 +29,7 @@ PyJWT==2.10.1
 python-dotenv==1.1.0
 python-multipart==0.0.20
 PyYAML==6.0.2
+redis==5.2.1
 rich==14.0.0
 rich-toolkit==0.14.1
 shellingham==1.5.4
