@@ -1,8 +1,7 @@
 from sqlmodel import select, desc
 from sqlmodel.ext.asyncio.session import AsyncSession
-from datetime import datetime
 
-from src.books.models import Book
+from src.db.models import Book
 from src.books.schemas import BookCreateModel, BookUpdateModel
 
 
