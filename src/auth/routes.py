@@ -9,10 +9,17 @@ from src.db.redis import add_jti_to_blocklist
 from src.auth.service import UserService
 from src.auth.utils import verify_password, create_access_token
 from src.auth.schemas import UserModel, UserCreateModel, UserLoginModel
-from src.auth.dependencies import RefreshTokenBearer, AccessTokenBearer
+from src.auth.dependencies import (
+    RefreshTokenBearer,
+    AccessTokenBearer,
+    get_current_user as get_current_user_dependency,
+    RoleChecker,
+)
+
 
 auth_router = APIRouter()
 user_service = UserService()
+role_checker = RoleChecker(["admin", "user"])
 
 REFRESH_TOKEN_EXPIRE_DAYS = 2
 
@@ -62,11 +69,11 @@ async def login_users(
         )
 
     access_token = create_access_token(
-        user_data={"email": user.email, "user_uid": str(user.uid)}
+        user_data={"email": user.email, "user_uid": str(user.uid), "role": user.role},
     )
 
     refresh_token = create_access_token(
-        user_data={"email": user.email, "user_uid": str(user.uid)},
+        user_data={"email": user.email, "user_uid": str(user.uid), "role": user.role},
         expiry=timedelta(days=REFRESH_TOKEN_EXPIRE_DAYS),
         refresh=True,
     )
@@ -98,6 +105,13 @@ async def get_new_access_token(token_details: dict = Depends(RefreshTokenBearer(
     new_access_token = create_access_token(user_data=token_details["user"])
 
     return JSONResponse({"access_token": new_access_token})
+
+
+@auth_router.get("/me")
+async def get_current_user(
+    user=Depends(get_current_user_dependency), _: bool = Depends(role_checker)
+):
+    return user
 
 
 @auth_router.get("/logout")

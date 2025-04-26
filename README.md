@@ -36,9 +36,9 @@ Quillist API is a RESTful API built with FastAPI for managing book reviews. It p
 - [x] HTTP Bearer authentication
 - [x] Refresh token implementation
 - [x] Token revocation using Redis
-- [ ] Role-based access control
-- [ ] Current user retrieval endpoint
-- [ ] Role checker dependency
+- [x] Role-based access control
+- [x] Current user retrieval endpoint
+- [x] Role checker dependency
 
 ### Model & Schema Relationships
 
@@ -79,6 +79,28 @@ Quillist API is a RESTful API built with FastAPI for managing book reviews. It p
 - [ ] Dockerfile creation
 - [ ] Docker Compose setup
 - [ ] Deployment on Render.com
+
+## Role Based Access Control
+
+The API supports role-based access control (RBAC) to manage user permissions. The following roles are defined:
+
+- `admin`: Full access to all endpoints.
+- `user`: Limited access to user-specific endpoints.
+
+The `admin` role can perform these actions:
+
+- Add users
+- Change user roles
+- CURD on users
+- CURD on books
+- CURD on reviews
+- Revoking access tokens
+
+The `user` role can perform these actions:
+
+- CURD on their own book submissions
+- CURD on their own reviews
+- CURD on their own account
 
 ## Project Setup
 

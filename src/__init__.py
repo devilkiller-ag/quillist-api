@@ -23,7 +23,7 @@ app = FastAPI(
     title="Quillist",
     description="A REST API for book review web service.",
     version=version,
-    lifespan=lifespan,
+    # lifespan=lifespan, # Uncomment this line to use the init_db() in the custom lifespan context manager. Currently we are using alembic for migrations and default FastAPI lifespan context manager.
 )
 
 
