@@ -8,7 +8,7 @@ from src.db.main import get_session
 from src.db.redis import add_jti_to_blocklist
 from src.auth.service import UserService
 from src.auth.utils import verify_password, create_access_token
-from src.auth.schemas import UserModel, UserCreateModel, UserLoginModel
+from src.auth.schemas import UserModel, UserCreateModel, UserLoginModel, UserBooksModel
 from src.auth.dependencies import (
     RefreshTokenBearer,
     AccessTokenBearer,
@@ -107,7 +107,7 @@ async def get_new_access_token(token_details: dict = Depends(RefreshTokenBearer(
     return JSONResponse({"access_token": new_access_token})
 
 
-@auth_router.get("/me", response_model=UserModel)
+@auth_router.get("/me", response_model=UserBooksModel)
 async def get_current_user(
     user=Depends(get_current_user_dependency), _: bool = Depends(role_checker)
 ):
