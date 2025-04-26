@@ -6,7 +6,7 @@ from logging.config import fileConfig
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
-from src.db.models import User, Book
+from src.db.models import User, Book, Review
 from src.config import Config as AppConfig
 
 # this is the Alembic Config object, which provides
