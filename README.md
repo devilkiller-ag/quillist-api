@@ -43,8 +43,8 @@ Quillist API is a RESTful API built with FastAPI for managing book reviews. It p
 ### Model & Schema Relationships
 
 - [x] User-book relationship modeling
-- [ ] User-review relationship modeling
-- [ ] Nested schema serialization
+- [x] User-review relationship modeling
+- [x] Nested schema serialization
 
 ### Middleware & Error Handling
 
