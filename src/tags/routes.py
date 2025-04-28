@@ -1,5 +1,6 @@
 from typing import List
 from fastapi import APIRouter, Depends, status
+from fastapi.exceptions import HTTPException
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from src.books.schemas import Book
@@ -29,9 +30,9 @@ async def get_all_tags(session: AsyncSession = Depends(get_session)):
     "/",
     response_model=TagModel,
     status_code=status.HTTP_201_CREATED,
-    dependencies=[user_role_checker],
+    dependencies=[Depends(user_role_checker)],
 )
-async def add_tag(
+async def create_tag(
     tag_data: TagCreateModel, session: AsyncSession = Depends(get_session)
 ) -> TagModel:
     tag_added = await tag_service.add_tag(tag_data=tag_data, session=session)
@@ -75,6 +76,9 @@ async def update_tag(
 async def delete_tag(
     tag_uid: str, session: AsyncSession = Depends(get_session)
 ) -> None:
-    updated_tag = await tag_service.delete_tag(tag_uid, session)
+    deleted_tag = await tag_service.delete_tag(tag_uid, session)
 
-    return updated_tag
+    if not deleted_tag:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Tag not found"
+        )
