@@ -7,6 +7,7 @@ from src.tags.routes import tags_router
 from src.books.routes import book_router
 from src.reviews.routes import review_router
 from src.errors import register_all_errors
+from src.middleware import register_middleware
 
 
 @asynccontextmanager
@@ -31,6 +32,8 @@ app = FastAPI(
 
 
 register_all_errors(app)
+
+register_middleware(app)
 
 
 @app.get("/")

@@ -50,9 +50,9 @@ Quillist API is a RESTful API built with FastAPI for managing book reviews. It p
 
 - [x] Custom exception classes
 - [x] Exception handlers registration
-- [ ] Custom logging middleware
-- [ ] CORS middleware integration
-- [ ] Trusted hosts configuration
+- [x] Custom logging middleware
+- [x] CORS middleware integration
+- [x] Trusted hosts configuration
 
 ### Email Support
 
