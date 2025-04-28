@@ -1,7 +1,6 @@
 from datetime import timedelta, datetime
 from fastapi import APIRouter, Depends, status
 from fastapi.responses import JSONResponse
-from fastapi.exceptions import HTTPException
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from src.db.main import get_session
@@ -15,6 +14,7 @@ from src.auth.dependencies import (
     get_current_user as get_current_user_dependency,
     RoleChecker,
 )
+from src.errors import UserAlreadyExists, UserNotFound, InvalidCredentials, InvalidToken
 
 
 auth_router = APIRouter()
@@ -35,10 +35,7 @@ async def create_user_account(
     user_exists = await user_service.user_exists(email, session)
 
     if user_exists:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="User with this email already exists",
-        )
+        raise UserAlreadyExists()
 
     new_user = await user_service.create_user(user_data, session)
 
@@ -55,18 +52,12 @@ async def login_users(
     user = await user_service.get_user_by_email(email, session)
 
     if user is None:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="User with this email does not exist",
-        )
+        raise UserNotFound()
 
     password_valid = verify_password(password, user.password_hash)
 
     if not password_valid:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Invalid password",
-        )
+        raise InvalidCredentials()
 
     access_token = create_access_token(
         user_data={"email": user.email, "user_uid": str(user.uid), "role": user.role},
@@ -98,9 +89,7 @@ async def get_new_access_token(token_details: dict = Depends(RefreshTokenBearer(
     expiry_timestamp = token_details["exp"]
 
     if datetime.fromtimestamp(expiry_timestamp) < datetime.now():
-        return HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid or expired token"
-        )
+        return InvalidToken()
 
     new_access_token = create_access_token(user_data=token_details["user"])
 

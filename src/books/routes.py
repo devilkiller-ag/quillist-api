@@ -1,5 +1,4 @@
 from typing import List
-from fastapi.exceptions import HTTPException
 from fastapi import APIRouter, status, Depends
 from sqlmodel.ext.asyncio.session import AsyncSession
 
@@ -7,7 +6,7 @@ from src.db.main import get_session
 from src.books.service import BookService
 from src.books.schemas import Book, BookDetailModel, BookCreateModel, BookUpdateModel
 from src.auth.dependencies import AccessTokenBearer, RoleChecker
-
+from src.errors import BookNotFound
 
 book_router = APIRouter()
 book_service = BookService()
@@ -23,9 +22,7 @@ async def get_all_books(
     books = await book_service.get_all_books(session)
 
     if books is None:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="No books found"
-        )
+        raise BookNotFound()
 
     return books
 
@@ -41,9 +38,7 @@ async def get_user_book_submissions(
     books = await book_service.get_user_books(user_uid, session)
 
     if books is None:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="No books found"
-        )
+        raise BookNotFound()
 
     return books
 
@@ -76,9 +71,7 @@ async def get_book(
     book = await book_service.get_book(book_uid, session)
 
     if book is None:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="Book not found"
-        )
+        raise BookNotFound()
 
     return book
 
@@ -95,9 +88,7 @@ async def update_book(
     updated_book = await book_service.update_book(book_uid, book_update_data, session)
 
     if updated_book is None:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="Book not found"
-        )
+        raise BookNotFound()
 
     return updated_book
 
@@ -115,6 +106,4 @@ async def delete_book(
     deleted_book = await book_service.delete_book(book_uid, session)
 
     if not deleted_book:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="Book not found"
-        )
+        raise BookNotFound()

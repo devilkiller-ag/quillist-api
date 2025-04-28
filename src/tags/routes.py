@@ -1,6 +1,5 @@
 from typing import List
 from fastapi import APIRouter, Depends, status
-from fastapi.exceptions import HTTPException
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from src.books.schemas import Book
@@ -8,6 +7,7 @@ from src.db.main import get_session
 from src.tags.service import TagService
 from src.tags.schemas import TagAddModel, TagCreateModel, TagModel
 from src.auth.dependencies import RoleChecker
+from src.errors import TagNotFound
 
 
 tags_router = APIRouter()
@@ -79,6 +79,4 @@ async def delete_tag(
     deleted_tag = await tag_service.delete_tag(tag_uid, session)
 
     if not deleted_tag:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="Tag not found"
-        )
+        raise TagNotFound()

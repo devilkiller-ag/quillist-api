@@ -7,7 +7,12 @@ from src.db.models import Review
 from src.auth.service import UserService
 from src.books.service import BookService
 from src.reviews.schemas import ReviewCreateModel
-
+from src.errors import (
+    UserNotFound,
+    BookNotFound,
+    ReviewNotFound,
+    InsufficientPermission,
+)
 
 book_service = BookService()
 user_service = UserService()
@@ -21,10 +26,7 @@ class ReviewService:
             review = result.first()
 
             if not review:
-                raise HTTPException(
-                    status_code=status.HTTP_404_NOT_FOUND,
-                    detail="Review not found.",
-                )
+                raise ReviewNotFound()
 
             return review
 
@@ -41,10 +43,7 @@ class ReviewService:
             reviews = result.all()
 
             if not reviews:
-                raise HTTPException(
-                    status_code=status.HTTP_404_NOT_FOUND,
-                    detail="No reviews found.",
-                )
+                raise ReviewNotFound()
 
             return reviews
 
@@ -66,16 +65,10 @@ class ReviewService:
             user = await user_service.get_user_by_email(user_email, session)
 
             if not book:
-                raise HTTPException(
-                    status_code=status.HTTP_404_NOT_FOUND,
-                    detail="Book not found.",
-                )
+                raise BookNotFound()
 
             if not user:
-                raise HTTPException(
-                    status_code=status.HTTP_404_NOT_FOUND,
-                    detail="User not found.",
-                )
+                raise UserNotFound()
 
             review_data_dict = review_data.model_dump()
             new_review = Review(**review_data_dict)
@@ -103,16 +96,10 @@ class ReviewService:
             review = await self.get_review(review_uid, session)
 
             if not review:
-                raise HTTPException(
-                    status_code=status.HTTP_404_NOT_FOUND,
-                    detail="Review not found.",
-                )
+                raise ReviewNotFound()
 
             if review.user != user:
-                raise HTTPException(
-                    status_code=status.HTTP_403_FORBIDDEN,
-                    detail="You do not have permission to delete this review.",
-                )
+                raise InsufficientPermission()
 
             session.delete(review)
             await session.commit()

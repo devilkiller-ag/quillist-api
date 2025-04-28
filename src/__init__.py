@@ -6,6 +6,7 @@ from src.auth.routes import auth_router
 from src.tags.routes import tags_router
 from src.books.routes import book_router
 from src.reviews.routes import review_router
+from src.errors import register_all_errors
 
 
 @asynccontextmanager
@@ -27,6 +28,9 @@ app = FastAPI(
     version=version,
     # lifespan=lifespan, # Uncomment this line to use the init_db() in the custom lifespan context manager. Currently we are using alembic for migrations and default FastAPI lifespan context manager.
 )
+
+
+register_all_errors(app)
 
 
 @app.get("/")
