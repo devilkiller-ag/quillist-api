@@ -21,12 +21,12 @@ async def lifespan(app: FastAPI):
     print("Server shutting down...")
 
 
-version = "v1"
+api_version = "v1"
 
 app = FastAPI(
     title="Quillist",
     description="A REST API for book review web service.",
-    version=version,
+    api_version=api_version,
     # lifespan=lifespan, # Uncomment this line to use the init_db() in the custom lifespan context manager. Currently we are using alembic for migrations and default FastAPI lifespan context manager.
 )
 
@@ -41,7 +41,9 @@ async def hello_world():
     return {"message": "Quillist says Hello World!"}
 
 
-app.include_router(auth_router, prefix=f"/api/{version}/auth", tags=["auth"])
-app.include_router(book_router, prefix=f"/api/{version}/books", tags=["books"])
-app.include_router(review_router, prefix=f"/api/{version}/reviews", tags=["reviews"])
-app.include_router(tags_router, prefix=f"/api/{version}/tags", tags=["tags"])
+app.include_router(auth_router, prefix=f"/api/{api_version}/auth", tags=["auth"])
+app.include_router(book_router, prefix=f"/api/{api_version}/books", tags=["books"])
+app.include_router(
+    review_router, prefix=f"/api/{api_version}/reviews", tags=["reviews"]
+)
+app.include_router(tags_router, prefix=f"/api/{api_version}/tags", tags=["tags"])

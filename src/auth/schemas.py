@@ -19,6 +19,11 @@ class UserModel(BaseModel):
     updated_at: datetime
 
 
+class UserSignupResponseModel(BaseModel):
+    message: str
+    user: UserModel
+
+
 class UserBooksModel(UserModel):
     books: List[Book]
     reviews: List[ReviewModel]
@@ -35,3 +40,7 @@ class UserCreateModel(BaseModel):
 class UserLoginModel(BaseModel):
     email: str = Field(max_length=50)
     password: str = Field(min_length=6)
+
+
+class EmailModel(BaseModel):
+    addresses: List[str]

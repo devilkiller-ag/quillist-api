@@ -31,3 +31,12 @@ class UserService:
         await session.commit()
 
         return new_user
+
+    async def update_user(self, user: User, user_data: dict, session: AsyncSession):
+        for key, value in user_data.items():
+            if hasattr(user, key):
+                setattr(user, key, value)
+
+        await session.commit()
+
+        return user

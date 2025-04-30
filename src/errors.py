@@ -35,6 +35,12 @@ class RefreshTokenRequired(QuillistException):
     pass
 
 
+class InvalidVerificationToken(QuillistException):
+    """User has provided an invalid or expired verification link/token."""
+
+    pass
+
+
 class UserNotFound(QuillistException):
     """User has provided an email that does not exist in the database."""
 
@@ -166,6 +172,18 @@ def register_all_errors(app: FastAPI):
                 "message": "Please provide a refresh token",
                 "error_code": "refresh_token_required",
                 "resolution": "Please provide a refresh token",
+            },
+        ),
+    )
+
+    app.add_exception_handler(
+        InvalidVerificationToken,
+        create_exception_handler(
+            status.HTTP_400_BAD_REQUEST,
+            {
+                "message": "Invalid or expired verification token",
+                "error_code": "invalid_verification_token",
+                "resolution": "Please check your email for verification details",
             },
         ),
     )

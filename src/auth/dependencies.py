@@ -78,8 +78,8 @@ class RoleChecker:
         self.allowed_roles = allowed_roles
 
     def __call__(self, current_user=Depends(get_current_user)):
-        # if not current_user.is_verified:
-        #     raise AccountNotVerified()
+        if not current_user.is_verified:
+            raise AccountNotVerified()
 
         if current_user.role in self.allowed_roles:
             return True

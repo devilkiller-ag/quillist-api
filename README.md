@@ -56,10 +56,10 @@ Quillist API is a RESTful API built with FastAPI for managing book reviews. It p
 
 ### Email Support
 
-- [ ] FastAPI-Mail setup
-- [ ] Email sending functionality
-- [ ] User account verification via email
-- [ ] Password reset emails
+- [x] FastAPI-Mail setup
+- [x] Email sending functionality
+- [x] User account verification via email
+- [x] Password reset emails
 
 ### Background Tasks
 
@@ -150,11 +150,21 @@ To set up the project, follow these steps:
    Create a `.env` file in the root folder and define all required enviornment variables.
 
 ```
+DOMAIN=
+
 DATABASE_URL=
-JWT_SECRET=
-JWT_ALGORITHM=
 REDIS_HOST=
 REDIS_PORT=
+
+JWT_SECRET=
+JWT_ALGORITHM=
+
+MAIL_USERNAME=
+MAIL_PASSWORD=
+MAIL_SERVER=
+MAIL_PORT=
+MAIL_FROM=
+MAIL_FROM_NAME=
 ```
 
 7. **Run the application:**
