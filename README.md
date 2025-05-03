@@ -64,9 +64,9 @@ Quillist API is a RESTful API built with FastAPI for managing book reviews. It p
 ### Background Tasks
 
 - [x] FastAPI background tasks
-- [ ] Celery integration with Redis
-- [ ] Celery worker setup
-- [ ] Flower monitoring for Celery
+- [x] Celery integration with Redis
+- [x] Celery worker setup
+- [x] Flower monitoring for Celery
 
 ### Testing & Documentation
 
@@ -176,9 +176,28 @@ You can access the API documentation at `http://localhost:8000/docs`.
 
 8. **Run Celery worker for background tasks:**
    Open a new terminal window, activate the virtual environment, and run the following command to start the Celery worker:
+
    ```bash
    celery  -A src.celery_tasks.celery_app worker
    ```
+
+9. **Run Flower for monitoring Celery tasks (Optional):**
+   Open another terminal window, activate the virtual environment, and run the following command to start Flower:
+
+   ```bash
+   celery -A src.celery_tasks.celery_app flower
+   ```
+
+   Flower will be accessible at `http://localhost:5555`.
+
+10. **Run Alembic migrations:**
+    To apply database migrations, run the following command:
+
+    ```bash
+    alembic upgrade head
+    ```
+
+    This will apply all pending migrations to the database.
 
 ## Environment Variables
 
