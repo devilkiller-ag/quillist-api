@@ -71,7 +71,7 @@ Quillist API is a RESTful API built with FastAPI for managing book reviews. It p
 ### Testing & Documentation
 
 - [x] API documentation with SwaggerUI and ReDoc
-- [ ] Unit testing with Unittest Mock and Pytest
+- [x] Unit testing with Unittest Mock and Pytest
 - [ ] Document-driven testing with Schemathesis
 
 ### Deployment
@@ -203,12 +203,24 @@ The application should now be up and running within the virtual environment.
 
     This will apply all pending migrations to the database.
 
-## Environment Variables
+11. **Run tests:**
+    To run the tests, use the following command:
 
-The application uses environment variables for configuration. Create a `.env` file in the root directory and add the following variables:
+    ```bash
+    pytest
+    ```
 
-```env
-DATABASE_URL=postgresql+asyncpg://username:password@localhost/dbname
-```
+    This will execute all the tests in the `tests` directory.
+    You can also run a specific test file or test case by specifying the path:
 
-Replace `username`, `password`, and `dbname` with your PostgreSQL credentials.
+    ```bash
+      pytest tests/test_file.py
+    ```
+
+    or
+
+    ```bash
+       pytest tests/test_file.py::test_case_name
+    ```
+
+    This will run only the specified test case.
