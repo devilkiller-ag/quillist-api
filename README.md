@@ -70,7 +70,7 @@ Quillist API is a RESTful API built with FastAPI for managing book reviews. It p
 
 ### Testing & Documentation
 
-- [ ] API documentation with SwaggerUI and ReDoc
+- [x] API documentation with SwaggerUI and ReDoc
 - [ ] Unit testing with Unittest Mock and Pytest
 - [ ] Document-driven testing with Schemathesis
 
@@ -172,7 +172,11 @@ MAIL_FROM_NAME=
    ```
 
 The application should now be up and running within the virtual environment.
-You can access the API documentation at `http://localhost:8000/docs`.
+
+- You can access the API at `http://localhost:8000`.
+- You can access the API documentation in **Swagger UI** at `http://localhost:8000/docs`.
+- You can access the API documentation in **ReDoc** at `http://localhost:8000/redoc`.
+- You can access the API documentation in **OpenAPI specification** at `http://localhost:8000/openapi.json`.
 
 8. **Run Celery worker for background tasks:**
    Open a new terminal window, activate the virtual environment, and run the following command to start the Celery worker:
