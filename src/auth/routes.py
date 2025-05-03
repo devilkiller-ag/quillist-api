@@ -38,6 +38,7 @@ from src.errors import (
     InvalidVerificationToken,
     ResetPasswordsDoNotMatch,
 )
+from src.celery_tasks import send_mail_task
 
 
 auth_router = APIRouter()
@@ -51,19 +52,18 @@ REFRESH_TOKEN_EXPIRE_DAYS = 2
 async def send_mail(emails: EmailModel):
     emails = emails.addresses
 
-    html = """
+    subject = "Welcome to Quillist"
+    html_message = """
         <h1>Welcome to Quillist</h1>
         <p>Thank you for signing up!</p>
         <p>We are excited to have you on board.</p>
     """
 
-    message = create_message(
+    send_mail_task.delay(
         recipients=emails,
-        subject="Welcome to Quillist",
-        body=html,
+        subject=subject,
+        body=html_message,
     )
-
-    await mail.send_message(message)
 
     return {
         "message": "Email sent successfully",
@@ -93,18 +93,19 @@ async def create_user_account(
     verification_link = (
         f"http://{Config.DOMAIN}/api/v1/auth/verify/{verification_token}"
     )
+
+    subject = "Verify your Quillist account"
     html_message = f"""
         <h1>Welcome to Quillist</h1>
         <p>Thank you for signing up, {new_user.first_name}!</p>
         <p>Please click <a href="{verification_link}">this</a> link to verify your account.</p>
     """
-    message = create_message(
+
+    send_mail_task.delay(
         recipients=[email],
-        subject="Verify your Quillist account",
+        subject=subject,
         body=html_message,
     )
-
-    bg_tasks.add_task(mail.send_message, message)
 
     return {
         "message": "Quillist account created! Please check your email to verify your account.",
@@ -218,17 +219,18 @@ async def password_reset_request(email_data: PasswordResetRequestModel):
 
     pasword_rest_link_token = create_urlsafe_token({"email": email})
     pasword_rest_link = f"http://{Config.DOMAIN}/api/v1/auth/password-reset-confirm/{pasword_rest_link_token}"
+
+    subject = "Reset your Quillist account password"
     html_message = f"""
         <h1>Reset your Quillist account password!</h1>
         <p>Please click <a href="{pasword_rest_link}">this</a> link to reset your account password.</p>
     """
-    message = create_message(
+
+    send_mail_task.delay(
         recipients=[email],
-        subject="Reset your Quillist account password",
+        subject=subject,
         body=html_message,
     )
-
-    await mail.send_message(message)
 
     return JSONResponse(
         content={

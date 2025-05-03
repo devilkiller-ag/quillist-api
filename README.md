@@ -153,8 +153,7 @@ To set up the project, follow these steps:
 DOMAIN=
 
 DATABASE_URL=
-REDIS_HOST=
-REDIS_PORT=
+REDIS_URL=
 
 JWT_SECRET=
 JWT_ALGORITHM=
@@ -174,6 +173,12 @@ MAIL_FROM_NAME=
 
 The application should now be up and running within the virtual environment.
 You can access the API documentation at `http://localhost:8000/docs`.
+
+8. **Run Celery worker for background tasks:**
+   Open a new terminal window, activate the virtual environment, and run the following command to start the Celery worker:
+   ```bash
+   celery  -A src.celery_tasks.celery_app worker
+   ```
 
 ## Environment Variables
 
