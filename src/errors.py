@@ -1,3 +1,12 @@
+"""
+Custom exception definitions and registration for FastAPI error handling in Quillist.
+
+This module defines application-specific exceptions and sets up global exception handlers
+for standardized API error responses. Each exception corresponds to a potential failure mode
+within the application, and each handler maps the exception to a proper HTTP status code and
+response message.
+"""
+
 from typing import Any, Callable
 from fastapi import FastAPI, status
 from fastapi.requests import Request
@@ -105,15 +114,15 @@ def create_exception_handler(
     status_code: int,
     initial_detail: Any,
 ) -> Callable[[Request, Exception], JSONResponse]:
-    """Create a custom exception handler for the Quillist API.
+    """
+    Factory function to create custom exception handlers.
 
     Args:
-        status_code (int): The HTTP status code to return.
-        initial_detail (Any): The initial detail to include in the response.
+        status_code (int): HTTP status code to return.
+        initial_detail (Any): Dictionary or message to return in the response body.
 
     Returns:
-        Callable[[Request, Exception], JSONResponse]: A function that takes a request and an exception
-            and returns a JSON response with the specified status code and detail.
+        Callable: An async handler function to be registered with FastAPI.
     """
 
     async def exception_handler(
@@ -128,7 +137,8 @@ def create_exception_handler(
 
 
 def register_all_errors(app: FastAPI):
-    """Register all custom error handlers for the Quillist API.
+    """
+    Registers all Quillist-specific exceptions with FastAPI's global exception handlers.
 
     Args:
         app (FastAPI): The FastAPI application instance.
@@ -317,6 +327,10 @@ def register_all_errors(app: FastAPI):
     async def internal_server_error_handler(
         request: Request, exc: Exception
     ) -> JSONResponse:
+        """
+        Handler for uncaught server-side exceptions.
+        """
+
         return JSONResponse(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             content={
@@ -333,6 +347,10 @@ def register_all_errors(app: FastAPI):
     async def database_error_handler(
         request: Request, exc: SQLAlchemyError
     ) -> JSONResponse:
+        """
+        Handler for exceptions raised by SQLAlchemy during DB operations.
+        """
+
         return JSONResponse(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             content={

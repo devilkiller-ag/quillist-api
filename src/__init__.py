@@ -1,3 +1,13 @@
+"""
+Main entry point for the Quillist FastAPI application.
+
+This module initializes the FastAPI app, registers middleware and error handlers,
+and includes all the route routers (auth, books, reviews, tags).
+
+It also defines a custom lifespan context manager for startup/shutdown logic
+and provides an overview of the API in the OpenAPI schema.
+"""
+
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
 
@@ -12,7 +22,19 @@ from src.middleware import register_middleware
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """Lifespan context manager for FastAPI."""
+    """
+    Custom lifespan context manager for FastAPI.
+
+    Executes tasks during application startup and shutdown.
+    Currently initializes the database connection on startup.
+
+    Args:
+        app (FastAPI): The FastAPI app instance.
+
+    Yields:
+        None
+    """
+
     print("Server Starting up...")
     await init_db()
 
@@ -21,10 +43,12 @@ async def lifespan(app: FastAPI):
     print("Server shutting down...")
 
 
+# API versioning and base path prefix
 api_version = "v1"
 api_prefix = f"/api/{api_version}"
 
-api_description = """
+# OpenAPI/Swagger documentation description
+api_description = f"""
     A REST API for book review web service.
     
     This API allows users to:
@@ -62,8 +86,15 @@ api_description = """
     - OpenAPI Specification, Swagger UI and Redoc for API documentation.
     - Python-dotenv for environment variable management.
     - Render for deploying the API.
+    
+    Important Links:
+    - Quillist API GitHub Repository: https://github.com/devilkiller-ag/quillist-api/
+    - Quillist API: https://quillist-api.onrender.com/api/{api_version}
+    - Quillist API Swagger UI Documentation: https://quillist-api.onrender.com/api/{api_version}/docs
+    - Quillist API Redoc Documentation: https://quillist-api.onrender.com/api/{api_version}/redoc
 """
 
+# Initialize FastAPI app
 app = FastAPI(
     title="Quillist",
     description=api_description,
@@ -81,6 +112,7 @@ app = FastAPI(
 )
 
 
+# Register global error handlers and middleware
 register_all_errors(app)
 
 register_middleware(app)
@@ -88,9 +120,16 @@ register_middleware(app)
 
 @app.get("/")
 async def hello_world():
+    """
+    Health check endpoint.
+
+    Returns a simple welcome message to confirm the API is running.
+    """
+
     return {"message": "Quillist says Hello World!"}
 
 
+# Include all route routers with API version prefix and tag grouping
 app.include_router(auth_router, prefix=f"{api_prefix}/auth", tags=["auth"])
 app.include_router(book_router, prefix=f"{api_prefix}/books", tags=["books"])
 app.include_router(review_router, prefix=f"{api_prefix}/reviews", tags=["reviews"])

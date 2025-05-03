@@ -7,6 +7,23 @@ Quillist API is a RESTful API built with FastAPI for managing book reviews. It p
 - Quillist API ReDoc documentation is live at [https://quillist-api.onrender.com/auth/v1/redoc](https://quillist-api.onrender.com/auth/v1/redoc)
 - Quillist API OpenAPI specification is live at [https://quillist-api.onrender.com/auth/v1/openapi.json](https://quillist-api.onrender.com/auth/v1/openapi.json)
 
+**NOTE:** User Signup, password reset, email verification and other email related features are not available in the live version of the API as it requires **paid background worker service hosting**. You can test these features locally by running the API on your machine.
+
+For testing purposes, you can use the following credentials:
+
+```
+"user": {
+        "uid": "4e66ac0d-0e61-408d-974d-9e8d6a5b6ba6",
+        "username": "quillist",
+        "email": "testuser@quillist.com",
+        "first_name": "Quillist",
+        "last_name": "Ray",
+        "is_verified": true,
+        "created_at": "2025-05-04T03:21:40.610001",
+        "updated_at": "2025-05-04T03:21:40.610011"
+    }
+```
+
 ## Features & Progress
 
 ### Core API Functionality
@@ -243,3 +260,26 @@ The application should now be up and running within the virtual environment.
     ```
 
     This will generate and run tests only for the specified endpoint.
+
+## Technologies Used
+
+- **FastAPI** for building the API.
+- **PostgreSQL** (NeonDB) for database.
+- **SQLAlchemy** and **SQLModel** for database ORM.
+- **Alembic** for database migrations.
+- **Pydantic** for data validation.
+- **UUID** for generating unique identifiers.
+- **JWT** for authentication.
+- **Passlib** for password hashing.
+- **itsdangerous** for generating and verifying tokens.
+- **FastAPI-Mail** for sending emails.
+- **Logging** for logging.
+- **Redis** for Token blacklisting, and Background Task queue (ex: sending emails).
+- **Celery** for background tasks (ex: sending emails).
+- **Flower** for background task monitoring.
+- **Asgiref** for async function to sync function conversion.
+- **Pytest** for testing.
+- **Schemathesis** for document driven testing.
+- **OpenAPI Specification**, **Swagger UI** and **Redoc** for API documentation.
+- **Python-dotenv** for environment variable management.
+- **Render** for deploying the API.
