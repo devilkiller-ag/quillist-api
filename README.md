@@ -2,7 +2,10 @@
 
 Quillist API is a RESTful API built with FastAPI for managing book reviews. It provides endpoints for user authentication, book management, and review submission. The API is designed to be efficient, scalable, and easy to use. It leverages modern Python features and libraries to provide a robust backend solution for book review applications.
 
-**Note:** This project is a work in progress and is not yet fully functional. The goal is to create a comprehensive API that can be used for book review applications.
+- Quillist API is live at [https://quillist-api.onrender.com/auth/v1](https://quillist-api.onrender.com/auth/v1)
+- Quillist API Swagger UI documentation is live at [https://quillist-api.onrender.com/auth/v1/docs](https://quillist-api.onrender.com/auth/v1/docs)
+- Quillist API ReDoc documentation is live at [https://quillist-api.onrender.com/auth/v1/redoc](https://quillist-api.onrender.com/auth/v1/redoc)
+- Quillist API OpenAPI specification is live at [https://quillist-api.onrender.com/auth/v1/openapi.json](https://quillist-api.onrender.com/auth/v1/openapi.json)
 
 ## Features & Progress
 
@@ -76,9 +79,7 @@ Quillist API is a RESTful API built with FastAPI for managing book reviews. It p
 
 ### Deployment
 
-- [ ] Dockerfile creation
-- [ ] Docker Compose setup
-- [ ] Deployment on Render.com
+- [x] Deployment on Render.com
 
 ## Role Based Access Control
 
@@ -150,7 +151,7 @@ To set up the project, follow these steps:
    Create a `.env` file in the root folder and define all required enviornment variables.
 
 ```
-DOMAIN=
+API_URL=
 
 DATABASE_URL=
 REDIS_URL=

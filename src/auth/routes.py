@@ -90,9 +90,7 @@ async def create_user_account(
     new_user = await user_service.create_user(user_data, session)
 
     verification_token = create_urlsafe_token({"email": email})
-    verification_link = (
-        f"http://{Config.DOMAIN}/api/v1/auth/verify/{verification_token}"
-    )
+    verification_link = f"{Config.API_URL}/api/v1/auth/verify/{verification_token}"
 
     subject = "Verify your Quillist account"
     html_message = f"""
@@ -218,7 +216,9 @@ async def password_reset_request(email_data: PasswordResetRequestModel):
     email = email_data.email
 
     pasword_rest_link_token = create_urlsafe_token({"email": email})
-    pasword_rest_link = f"http://{Config.DOMAIN}/api/v1/auth/password-reset-confirm/{pasword_rest_link_token}"
+    pasword_rest_link = (
+        f"{Config.API_URL}/api/v1/auth/password-reset-confirm/{pasword_rest_link_token}"
+    )
 
     subject = "Reset your Quillist account password"
     html_message = f"""

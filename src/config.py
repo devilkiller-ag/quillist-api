@@ -2,7 +2,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
-    DOMAIN: str = "localhost:8000"
+    API_URL: str = "http://localhost:8000"
     DATABASE_URL: str
     JWT_SECRET: str
     JWT_ALGORITHM: str

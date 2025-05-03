@@ -43,7 +43,7 @@ api_description = """
     
     It uses following technologies:
     - FastAPI for building the API.
-    - PostgreSQL for database.
+    - PostgreSQL (NeonDB) for database.
     - SQLAlchemy and SQLModel for database ORM.
     - Alembic for database migrations.
     - Pydantic for data validation.
@@ -61,7 +61,7 @@ api_description = """
     - Schemathesis for document driven testing.
     - OpenAPI Specification, Swagger UI and Redoc for API documentation.
     - Python-dotenv for environment variable management.
-    - Docker for containerization.
+    - Render for deploying the API.
 """
 
 app = FastAPI(
