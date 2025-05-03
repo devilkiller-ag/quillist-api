@@ -24,13 +24,59 @@ async def lifespan(app: FastAPI):
 api_version = "v1"
 api_prefix = f"/api/{api_version}"
 
+api_description = """
+    A REST API for book review web service.
+    
+    This API allows users to:
+    - Create an account and log in to the service using access token and refresh token.
+    - CURD books, reviews, and tags.
+    - Password reset and email verification.
+    
+    Additionally, it has the following features:
+    - Background tasks for sending emails.
+    - Token blacklisting for security.
+    - Custom error handling.
+    - Middleware for logging and performance monitoring.
+    - Dependency injection for database session management, authentication, and authorization.
+    - API documentation using OpenAPI Specification, Swagger UI and Redoc.
+    - Testing using Pytest.
+    
+    It uses following technologies:
+    - FastAPI for building the API.
+    - PostgreSQL for database.
+    - SQLAlchemy and SQLModel for database ORM.
+    - Alembic for database migrations.
+    - Pydantic for data validation.
+    - UUID for generating unique identifiers.
+    - JWT for authentication.
+    - Passlib for password hashing.
+    - itsdangerous for generating and verifying tokens.
+    - FastAPI-Mail for sending emails.
+    - Logging for logging.
+    - Redis for Token blacklisting, and Background Task queue (ex: sending emails).
+    - Celery for background tasks (ex: sending emails).
+    - Flower for background task monitoring.
+    - Asgiref for async function to sync function conversion.
+    - Pytest for testing.
+    - Schemathesis for document driven testing.
+    - OpenAPI Specification, Swagger UI and Redoc for API documentation.
+    - Python-dotenv for environment variable management.
+    - Docker for containerization.
+"""
+
 app = FastAPI(
     title="Quillist",
-    description="A REST API for book review web service.",
+    description=api_description,
     api_version=api_version,
+    license_info={"name": "MIT License", "url": "https://opensource.org/licenses/mit"},
+    contact={
+        "name": "Ashmit JaiSarita Gupta",
+        "url": "https://ashmit.dev",
+        "email": "ashmitgupta.social@gmail.com",
+    },
+    openapi_url=f"{api_prefix}/openapi.json",
     docs_url=f"{api_prefix}/docs",
     redoc_url=f"{api_prefix}/redoc",
-    contact={"email": "ashmitgupta.social@gmail.com"},
     # lifespan=lifespan, # Uncomment this line to use the init_db() in the custom lifespan context manager. Currently we are using alembic for migrations and default FastAPI lifespan context manager.
 )
 
