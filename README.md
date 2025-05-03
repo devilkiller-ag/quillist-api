@@ -72,7 +72,7 @@ Quillist API is a RESTful API built with FastAPI for managing book reviews. It p
 
 - [x] API documentation with SwaggerUI and ReDoc
 - [x] Unit testing with Unittest Mock and Pytest
-- [ ] Document-driven testing with Schemathesis
+- [x] Document-driven testing with Schemathesis
 
 ### Deployment
 
@@ -224,3 +224,21 @@ The application should now be up and running within the virtual environment.
     ```
 
     This will run only the specified test case.
+
+12. **Generate and run tests with Schemathesis (Document Driven Testing):**
+
+    - To generate tests using Schemathesis, use the following command:
+
+    ```bash
+    st run http://127.0.0.1:8000/api/v1/openapi.json --experimental=openapi-3.1
+    ```
+
+    This will generate and run tests based on the OpenAPI specification.
+
+    - You can also specify a specific endpoint to test:
+
+    ```bash
+    st run http://127.0.0.1:8000/api/v1/openapi.json --experimental=openapi-3.1 --endpoint /api/v1/books
+    ```
+
+    This will generate and run tests only for the specified endpoint.
