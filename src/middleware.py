@@ -62,5 +62,6 @@ def register_middleware(app: FastAPI):
             "localhost",
             "127.0.0.1",
             "0.0.0.0",
+            "quillist-api.onrender.com",
         ],
     )
