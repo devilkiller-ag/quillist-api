@@ -71,6 +71,12 @@ class InvalidCredentials(QuillistException):
     pass
 
 
+class ResetPasswordsDoNotMatch(QuillistException):
+    """User has provided two different passwords during password reset."""
+
+    pass
+
+
 class BookNotFound(QuillistException):
     """User has provided a book id that does not exist in the database."""
 
@@ -244,6 +250,18 @@ def register_all_errors(app: FastAPI):
                 "message": "Invalid credentials",
                 "error_code": "invalid_credentials",
                 "resolution": "Please check your email and password",
+            },
+        ),
+    )
+
+    app.add_exception_handler(
+        ResetPasswordsDoNotMatch,
+        create_exception_handler(
+            status.HTTP_400_BAD_REQUEST,
+            {
+                "message": "Passwords do not match",
+                "error_code": "passwords_do_not_match",
+                "resolution": "Please ensure both passwords (new password and confirm new password) are the same",
             },
         ),
     )

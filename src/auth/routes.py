@@ -11,6 +11,7 @@ from src.auth.utils import (
     create_access_token,
     create_urlsafe_token,
     decode_urlsafe_token,
+    generate_password_hash,
 )
 from src.auth.schemas import (
     EmailModel,
@@ -18,6 +19,8 @@ from src.auth.schemas import (
     UserLoginModel,
     UserCreateModel,
     UserSignupResponseModel,
+    PasswordResetRequestModel,
+    PasswordResetConfirmModel,
 )
 from src.auth.dependencies import (
     RefreshTokenBearer,
@@ -33,6 +36,7 @@ from src.errors import (
     UserAlreadyExists,
     InvalidCredentials,
     InvalidVerificationToken,
+    ResetPasswordsDoNotMatch,
 )
 
 
@@ -43,7 +47,7 @@ role_checker = RoleChecker(["admin", "user"])
 REFRESH_TOKEN_EXPIRE_DAYS = 2
 
 
-@auth_router.post("/send_mail")
+@auth_router.post("/send-mail")
 async def send_mail(emails: EmailModel):
     emails = emails.addresses
 
@@ -173,7 +177,7 @@ async def login_users(
     )
 
 
-@auth_router.get("/refresh_token", status_code=status.HTTP_200_OK)
+@auth_router.get("/refresh-token", status_code=status.HTTP_200_OK)
 async def get_new_access_token(token_details: dict = Depends(RefreshTokenBearer())):
     expiry_timestamp = token_details["exp"]
 
@@ -203,4 +207,64 @@ async def revoke_token(
 
     return JSONResponse(
         content={"message": "Logged out successfully"}, status_code=status.HTTP_200_OK
+    )
+
+
+@auth_router.post("/password-reset-request")
+async def password_reset_request(email_data: PasswordResetRequestModel):
+    email = email_data.email
+
+    pasword_rest_link_token = create_urlsafe_token({"email": email})
+    pasword_rest_link = f"http://{Config.DOMAIN}/api/v1/auth/password-reset-confirm/{pasword_rest_link_token}"
+    html_message = f"""
+        <h1>Reset your Quillist account password!</h1>
+        <p>Please click <a href="{pasword_rest_link}">this</a> link to reset your account password.</p>
+    """
+    message = create_message(
+        recipients=[email],
+        subject="Reset your Quillist account password",
+        body=html_message,
+    )
+
+    await mail.send_message(message)
+
+    return JSONResponse(
+        content={
+            "message": "Password reset link sent! Please check your email to reset your password."
+        },
+        status_code=status.HTTP_200_OK,
+    )
+
+
+@auth_router.post("/password-reset-confirm/{token}", status_code=status.HTTP_200_OK)
+async def reset_account_password(
+    token: str,
+    passwords: PasswordResetConfirmModel,
+    session: AsyncSession = Depends(get_session),
+):
+    if passwords.new_password != passwords.confirm_new_password:
+        return ResetPasswordsDoNotMatch()
+
+    try:
+        decoded_token = decode_urlsafe_token(token)
+    except Exception as e:
+        return InvalidVerificationToken()
+
+    email = decoded_token.get("email")
+
+    if not email:
+        return InvalidVerificationToken()
+
+    user = await user_service.get_user_by_email(email, session)
+
+    if not user:
+        return UserNotFound()
+
+    new_password_hash = generate_password_hash(passwords.new_password)
+
+    await user_service.update_user(user, {"password_hash": new_password_hash}, session)
+
+    return JSONResponse(
+        content={"message": "Password reset successfully! You can now log in."},
+        status_code=status.HTTP_200_OK,
     )
