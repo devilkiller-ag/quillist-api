@@ -63,7 +63,7 @@ Quillist API is a RESTful API built with FastAPI for managing book reviews. It p
 
 ### Background Tasks
 
-- [ ] FastAPI background tasks
+- [x] FastAPI background tasks
 - [ ] Celery integration with Redis
 - [ ] Celery worker setup
 - [ ] Flower monitoring for Celery

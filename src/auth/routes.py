@@ -1,5 +1,5 @@
 from datetime import timedelta, datetime
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, status, BackgroundTasks
 from fastapi.responses import JSONResponse
 from sqlmodel.ext.asyncio.session import AsyncSession
 
@@ -76,7 +76,9 @@ async def send_mail(emails: EmailModel):
     response_model=UserSignupResponseModel,
 )
 async def create_user_account(
-    user_data: UserCreateModel, session: AsyncSession = Depends(get_session)
+    user_data: UserCreateModel,
+    bg_tasks: BackgroundTasks,
+    session: AsyncSession = Depends(get_session),
 ):
     email = user_data.email
 
@@ -102,7 +104,7 @@ async def create_user_account(
         body=html_message,
     )
 
-    await mail.send_message(message)
+    bg_tasks.add_task(mail.send_message, message)
 
     return {
         "message": "Quillist account created! Please check your email to verify your account.",
